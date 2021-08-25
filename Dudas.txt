@@ -1,9 +1,4 @@
-1) MER
-a) El barrio puede ser una entidad o un atributo multivaluado?
-b) estacion de inicio, estacion final en donde va?
-
-2)MR
-nombreBarrio esta bien normalizado en estaciones?
-
-3) DDL
-Tabla INCLUYEN tiene 3 veces la FK "repetida", encontrar forma de escribirlo mejor
+1) MR-Falta confirmar si la normalizacion esta bien hecha
+1) -revisar las fechas en el DDL
+   -REVISAR EL INSERT PASAN ()
+   -TABLA PASAN, REVISAR NUMERO DE LINEA CON CODIGOESTACION
