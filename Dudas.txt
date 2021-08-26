@@ -2,3 +2,13 @@
 1) -revisar las fechas en el DDL
    -REVISAR EL INSERT PASAN ()
    -TABLA PASAN, REVISAR NUMERO DE LINEA CON CODIGOESTACION
+   -ADECUAR EL INSERT A LAS CONSULTAS
+
+
+2)CONSULTAS
+	A) Parece ok
+	B) Esta mal, duda sobre el promedio de trenes del anio pasado (el promedio sobre el total de estaciones o sobre esa estacion???)
+	C) Falta poner el nombre de estacion origen-destino en lugar del codigo (no pude, ya que la tabla hereda solamente el codigo de la otra entidad)
+	D) Parece Ok, demasiado facil, sospechar
+	E) Parece Ok, revisar por las dudas con un insert mejor
+	F) Parece Ok, revisar por las  "        "     "     "       "
