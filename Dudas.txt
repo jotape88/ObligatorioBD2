@@ -4,6 +4,7 @@
    -TABLA PASAN, REVISAR NUMERO DE LINEA CON CODIGOESTACION
    -ADECUAR EL INSERT A LAS CONSULTAS
 
+1) **************indices compuestos vs sueltos, preguntar el MARTES***********
 
 2)CONSULTAS
 	A) Parece ok

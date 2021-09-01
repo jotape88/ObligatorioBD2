@@ -71,7 +71,7 @@ GROUP BY
 	L.codigoEstacionDestino
 
 
-	
+
 	
 
 --d.	Mostrar los datos de la línea que recorre la distancia más larga
