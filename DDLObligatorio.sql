@@ -65,9 +65,9 @@ CREATE TABLE PASAN (
 	CONSTRAINT FK_Pasan_Lineas_NumLinea FOREIGN KEY (numeroLinea) REFERENCES Lineas (numero),
 	CONSTRAINT FK_Pasan_Estaciones_CodEstacion FOREIGN KEY (codigoEstacion) REFERENCES Estaciones (codigo),
 );
-CREATE INDEX IDX_Pasan_NumTren ON PASAN(numeroTren)
-CREATE INDEX IDX_Pasan_NumLinea ON PASAN(numeroLinea)
-CREATE INDEX IDX_Pasan_CodEstacion ON PASAN(codigoEstacion)
+CREATE INDEX IDX_Pasan_NumTren ON Pasan(numeroTren)
+CREATE INDEX IDX_Pasan_NumLinea ON Pasan(numeroLinea)
+CREATE INDEX IDX_Pasan_CodEstacion ON Pasan(codigoEstacion)
 
 
 
@@ -194,4 +194,3 @@ INSERT INTO Pasan VALUES (1900, 120, 17, CONCAT(CONVERT(char(10), DATEADD(DAY, -
 INSERT INTO Pasan VALUES (1200, 250, 5, CONCAT(CONVERT(char(10), DATEADD(DAY, -1, GETDATE()),126), ' 03:13:00'));
 INSERT INTO Pasan VALUES (1200, 100, 4, CONCAT(CONVERT(char(10), DATEADD(DAY, 2, GETDATE()),126), ' 03:15:00'));
 
-----
