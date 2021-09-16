@@ -61,7 +61,7 @@ WHERE L.longitud = (SELECT MAX(L2.longitud)
 --e.	Mostrar los datos de las estaciones que están incluidas en líneas de color rojo 
 --pero no están incluidas en líneas de color amarillo.
 
-SELECT DISTINCT E.*
+SELECT E.*
 FROM Estaciones E, Lineas L, Poseen P
 WHERE P.codigoEstacion = E.codigo AND 
 	  P.numeroLinea = L.numero AND 
@@ -82,7 +82,8 @@ WHERE T.numero IN (SELECT P.numeroTren
 													          FROM Estaciones E))
 													       
 
---FORMA DESPROLIJA (muchos group by):
+
+--OTRA forma (muchos group by):
 
 --SELECT T.*
 --FROM TRENES T, PASAN P
