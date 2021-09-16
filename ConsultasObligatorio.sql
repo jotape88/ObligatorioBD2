@@ -22,8 +22,10 @@ ORDER BY
 --b.	Mostrar los datos de las estaciones por las que pasaron más trenes este 
 --año que la cantidad promedio de trenes que pasaron en el año anterior.
 SELECT
-	E.codigo as codigoestacion,
-	COUNT(P.numeroTren) as cantidadTrenes
+	E.codigo,
+	E.barrio,
+	E.descripcion,
+	COUNT(*) as cantidadTrenes --No es solicitado, solo a modo de informacion
 FROM
 	ESTACIONES E,
 	PASAN P
@@ -31,32 +33,28 @@ WHERE
 	E.codigo = P.codigoEstacion AND
 	YEAR(P.fechaYHora) = YEAR(GETDATE())
 GROUP BY
-	E.codigo
+	E.codigo,
+	E.barrio,
+	E.descripcion
 HAVING
-	COUNT(P.numeroTren) > (SELECT
-								E2.codigo,
-								COUNT(P2.numeroTren)
-							FROM
-								PASAN P2,
-								ESTACIONES E2
-							WHERE
-								E2.codigo = p2.codigoEstacion AND
-								YEAR(P2.fechaYHora) = '2021'
-							GROUP BY
-								E2.codigo
-							
-									)
-
-
+	COUNT(*) > (SELECT
+					COUNT(*) / COUNT(DISTINCT P2.codigoEstacion) AS PromedioTrenes
+				FROM
+					PASAN P2
+				WHERE
+					YEAR(P2.fechaYHora) = '2020')
+				
 
 --c.	Mostrar numero de línea, descripción, nombre de la estación inicio
 --nombre de la estación destino y cantidad de estaciones que la componen.
+
+--MAL, REPASAR
 SELECT
 	L.numero AS NumeroLinea,
 	L.descripcion AS Descripcion,
 	L.codigoEstacionOrigen,
 	L.codigoEstacionDestino,
-	COUNT(P.codigoEstacion) AS CantidadDeEstaciones
+	COUNT(*) AS CantidadDeEstaciones
 FROM
 	LINEAS L,
 	POSEEN P,
@@ -69,7 +67,6 @@ GROUP BY
 	L.descripcion,
 	L.codigoEstacionOrigen,
 	L.codigoEstacionDestino
-
 
 
 	

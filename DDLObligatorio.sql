@@ -44,31 +44,28 @@ CREATE TABLE Trenes (
 
 
 CREATE TABLE Poseen (
+	id INT IDENTITY(1,1) NOT NULL, --Creado a modo de facilitar las consultas
 	numeroLinea INT NOT NULL,
 	codigoEstacion INT NOT NULL,
-	CONSTRAINT PK_Poseen PRIMARY KEY (numeroLinea, codigoEstacion),
+	CONSTRAINT PK_Poseen PRIMARY KEY (id),
+	CONSTRAINT UK_Poseen_NumLinea_Estacion UNIQUE (numeroLinea, codigoEstacion),
 	CONSTRAINT FK_Poseen_Lineas_NumLinea FOREIGN KEY (numeroLinea) REFERENCES Lineas (numero),
 	CONSTRAINT FK_Poseen_Estaciones_CodEstacion FOREIGN KEY (codigoEstacion) REFERENCES Estaciones (codigo),
 );
-CREATE INDEX IDX_Poseen_NumLinea ON Poseen(numeroLinea)
-CREATE INDEX IDX_Poseens_CodEstacion ON Poseen(codigoEstacion)
 
 
-
-CREATE TABLE PASAN (
+CREATE TABLE Pasan (
+	id INT IDENTITY(1,1) NOT NULL, --Creado a modo de facilitar las consultas
 	numeroTren INT NOT NULL,
 	numeroLinea INT NOT NULL,
 	codigoEstacion INT NOT NULL,
 	fechaYHora DATETIME NOT NULL,
-	CONSTRAINT PK_Pasan PRIMARY KEY (numeroTren, numeroLinea, codigoEstacion, fechaYHora),
+	CONSTRAINT PK_Pasan PRIMARY KEY (id),
+	CONSTRAINT UK_Pasan_numTren_numLinea_codEstac_fechayH UNIQUE (numeroTren, numeroLinea, codigoEstacion, fechaYHora),
 	CONSTRAINT FK_Pasan_Trenes_NumTren FOREIGN KEY (numeroTren) REFERENCES Trenes (numero),
 	CONSTRAINT FK_Pasan_Lineas_NumLinea FOREIGN KEY (numeroLinea) REFERENCES Lineas (numero),
 	CONSTRAINT FK_Pasan_Estaciones_CodEstacion FOREIGN KEY (codigoEstacion) REFERENCES Estaciones (codigo),
 );
-CREATE INDEX IDX_Pasan_NumTren ON Pasan(numeroTren)
-CREATE INDEX IDX_Pasan_NumLinea ON Pasan(numeroLinea)
-CREATE INDEX IDX_Pasan_CodEstacion ON Pasan(codigoEstacion)
-
 
 
 
@@ -193,4 +190,5 @@ INSERT INTO Pasan VALUES (1900, 170, 19, CONCAT(CONVERT(char(10), DATEADD(DAY, -
 INSERT INTO Pasan VALUES (1900, 120, 17, CONCAT(CONVERT(char(10), DATEADD(DAY, -2, GETDATE()),126), ' 01:10:00'));
 INSERT INTO Pasan VALUES (1200, 250, 5, CONCAT(CONVERT(char(10), DATEADD(DAY, -1, GETDATE()),126), ' 03:13:00'));
 INSERT INTO Pasan VALUES (1200, 100, 4, CONCAT(CONVERT(char(10), DATEADD(DAY, 2, GETDATE()),126), ' 03:15:00'));
+
 
