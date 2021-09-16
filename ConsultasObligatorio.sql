@@ -42,13 +42,13 @@ HAVING
 				FROM
 					PASAN P2
 				WHERE
-					YEAR(P2.fechaYHora) = '2020')
+					YEAR(P2.fechaYHora) = YEAR(DATEADD(YEAR, -1, GETDATE())))
 				
 
 --c.	Mostrar numero de línea, descripción, nombre de la estación inicio
 --nombre de la estación destino y cantidad de estaciones que la componen.
 
---MAL, REPASAR
+---------------MAL, REPASAR
 SELECT
 	L.numero AS NumeroLinea,
 	L.descripcion AS Descripcion,
