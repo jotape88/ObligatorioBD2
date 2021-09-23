@@ -14,7 +14,7 @@ ORDER BY P.codigoEstacion
 --b.	Mostrar los datos de las estaciones por las que pasaron más trenes este 
 --año que la cantidad promedio de trenes que pasaron en el año anterior.
 
-SELECT E.codigo, E.barrio, E.descripcion, COUNT(*) as cantidadTrenes --No es solicitado, solo a modo de informacion
+SELECT E.codigo, E.barrio, E.descripcion, COUNT(*) as CantidadTrenes --No es solicitado, solo a modo de informacion
 FROM Estaciones E, Pasan P
 WHERE E.codigo = P.codigoEstacion AND 
 	  YEAR(P.fechaYHora) = YEAR(GETDATE())
@@ -22,31 +22,44 @@ GROUP BY E.codigo, E.barrio, E.descripcion
 HAVING COUNT(*) > (SELECT COUNT(*) / COUNT(DISTINCT P2.codigoEstacion) AS PromedioTrenes
 				   FROM Pasan P2
 				   WHERE YEAR(P2.fechaYHora) = YEAR(DATEADD(YEAR, -1, GETDATE())))
-				
 
+--Version Corregida
+SELECT E.codigo, E.barrio, E.descripcion, COUNT(*) as CantidadTrenes --No es solicitado, solo a modo de informacion
+FROM Estaciones E, Pasan P
+WHERE E.codigo = P.codigoEstacion AND 
+	  YEAR(P.fechaYHora) = YEAR(GETDATE())
+GROUP BY E.codigo, E.barrio, E.descripcion
+HAVING COUNT(*) > (SELECT AVG(miTabla.Cantidad)
+				   FROM (SELECT P2.CodigoEstacion, COUNT(*) AS Cantidad
+				         FROM Pasan P2
+						 WHERE YEAR(P2.fechaYHora) = YEAR(DATEADD(YEAR, -1, GETDATE()))
+						 GROUP BY p2.codigoEstacion) miTabla)
+				   
 --c.	Mostrar numero de línea, descripción, nombre de la estación inicio
 --nombre de la estación destino y cantidad de estaciones que la componen.
 
-
-----------------------MAL, REPASAR
 SELECT
 	L.numero AS NumeroLinea,
 	L.descripcion AS Descripcion,
-	L.codigoEstacionOrigen,
-	L.codigoEstacionDestino,
+	E.descripcion AS EstacionOrigen,
+	E2.descripcion AS EstacionDestino,
 	COUNT(*) AS CantidadDeEstaciones
 FROM
 	LINEAS L,
+	Lineas L2,
 	POSEEN P,
-	ESTACIONES E
+	ESTACIONES E,
+	ESTACIONES E2
 WHERE
 	L.numero = P.numeroLinea AND
-	E.codigo = P.codigoEstacion
+	L2.numero = P.numeroLinea AND
+	L.codigoEstacionOrigen = E.codigo AND
+	L2.codigoEstacionDestino = E2.codigo
 GROUP BY
 	L.numero,
 	L.descripcion,
-	L.codigoEstacionOrigen,
-	L.codigoEstacionDestino
+	E.descripcion,
+	E2.descripcion
 
 --------------------------------------
 	
@@ -71,7 +84,6 @@ WHERE P.codigoEstacion = E.codigo AND
 			                   WHERE P2.numeroLinea = L2.numero AND 
 									 L2.color = 'amarillo')
 
-
 --f.	Mostrar los datos de los trenes que pasaron por todas las estaciones existentes.
 SELECT T.*
 FROM Trenes T
@@ -81,8 +93,6 @@ WHERE T.numero IN (SELECT P.numeroTren
 				   HAVING COUNT(DISTINCT P.codigoEstacion) = (SELECT COUNT (E.codigo)
 													          FROM Estaciones E))
 													       
-
-
 --OTRA forma (muchos group by):
 
 --SELECT T.*
