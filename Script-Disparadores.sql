@@ -98,60 +98,49 @@ DELETE FROM Lineas WHERE numero=320
 /* b. Cada vez que un tren pasa por una estación se debe llevar un registro del acumulado de 
 trenes que pasaron por dicha estación, quizá deba crear un campo acumulado para que este punto pueda ser 
 realizado. */
-
---Tabla de auditoria
 GO
-CREATE TABLE AuditarPasajes(idAudit INT IDENTITY NOT NULL PRIMARY KEY,
-							codigoEstacion INT UNIQUE,
-							contadorTrenes INT)
-
-GO
---Trigger
-CREATE TRIGGER Trg_AuditaPasaje
+CREATE TRIGGER Trg_RegistroTrenes
 ON Pasan
 AFTER INSERT
 AS
 BEGIN
 
-IF NOT EXISTS(SELECT A.codigoEstacion
-	      FROM AuditarPasajes A, inserted I
-		  WHERE A.codigoEstacion = I.codigoEstacion)
-
-		  INSERT INTO AuditarPasajes (codigoEstacion, contadorTrenes) SELECT i.codigoEstacion, 1
-																	  FROM inserted i, Pasan p
-																	  WHERE P.id = I.id
-
-ELSE
-
-UPDATE AuditarPasajes
-SET contadorTrenes = contadorTrenes+1						
-WHERE codigoEstacion IN (SELECT i.codigoEstacion
-						 FROM inserted i
-						 WHERE codigoEstacion = I.codigoEstacion)
+UPDATE Estaciones
+SET contadorTrenes = contadorTrenes + (SELECT COUNT(*)
+					                   FROM inserted i
+					                   WHERE codigo = i.codigoEstacion)
+WHERE codigo IN (SELECT codigoEstacion
+				 FROM inserted)
 
 END
 
 ---------Consultas y datos de prueba---------
-select * from AuditarPasajes
+select * from Estaciones
 select * from Pasan
 
-delete from AuditarPasajes
+update Estaciones set contadorTrenes=0
+drop trigger Trg_RegistroTrenes
+delete from Pasan
 
-drop table AuditarPasajes
-drop trigger Trg_AuditaPasaje
-
-INSERT INTO Pasan VALUES (1900, 130, 1, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00'));
-INSERT INTO Pasan VALUES (2000, 140, 1, CONCAT(YEAR(DATEADD(YEAR, -1, GETDATE())), '-03-16 ', '19:25:00'));
-INSERT INTO Pasan VALUES (1500, 150, 1, CONCAT(YEAR(DATEADD(YEAR, -1, GETDATE())), '-03-16 ', '19:25:00'));
-INSERT INTO Pasan VALUES (1300, 190, 1, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00'));
-INSERT INTO Pasan VALUES (1600, 160, 2, CONCAT(YEAR(DATEADD(YEAR, -1, GETDATE())), '-03-16 ', '19:25:00'));
-INSERT INTO Pasan VALUES (1700, 170, 2, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00'));
-INSERT INTO Pasan VALUES (1800, 130, 3, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00'));
-INSERT INTO Pasan VALUES (1900, 130, 3, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00'));
-INSERT INTO Pasan VALUES (1100, 130, 5, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00'));
-INSERT INTO Pasan VALUES (1200, 170, 6, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00'));
-INSERT INTO Pasan VALUES (1800, 180, 6, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00'));
-INSERT INTO Pasan VALUES (1000, 110, 6, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00'));
-INSERT INTO Pasan VALUES (1100, 110, 18, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00'));
-INSERT INTO Pasan VALUES (1900, 110, 18, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00'));
-INSERT INTO Pasan VALUES (2000, 110, 20, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00'));
+INSERT INTO Pasan VALUES 
+(2000, 140, 1, CONCAT(YEAR(DATEADD(YEAR, -1, GETDATE())), '-03-16 ', '19:25:00')),
+(1500, 150, 1, CONCAT(YEAR(DATEADD(YEAR, -1, GETDATE())), '-03-16 ', '19:25:00')),
+(1300, 190, 1, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00')),
+(1600, 160, 2, CONCAT(YEAR(DATEADD(YEAR, -1, GETDATE())), '-03-16 ', '19:25:00')),
+(1700, 170, 2, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00')),
+(1800, 130, 3, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00')),
+(1900, 130, 3, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00')),
+(1100, 130, 5, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00')),
+(1200, 170, 6, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00')),
+(1800, 180, 6, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00')),
+(1000, 110, 6, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00')),
+(1100, 110, 18, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00')),
+(1900, 110, 18, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00')),
+(2000, 110, 20, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-03-16 ', '19:25:00')),
+(1100, 130, 3, CONCAT(YEAR(DATEADD(YEAR, -1, GETDATE())), '-04-16 ', '19:25:00')),
+(1200, 170, 6, CONCAT(YEAR(DATEADD(YEAR, -1, GETDATE())), '-05-16 ', '19:25:00')),
+(1800, 160, 8, CONCAT(YEAR(DATEADD(YEAR, -1, GETDATE())), '-06-12 ', '19:25:00')),
+(1000, 150, 8, CONCAT(YEAR(DATEADD(YEAR, -2, GETDATE())), '-07-16 ', '19:25:00')),
+(1100, 140, 18, CONCAT(YEAR(DATEADD(YEAR, -1, GETDATE())), '-08-06 ', '19:25:00')),
+(1900, 120, 18, CONCAT(YEAR(DATEADD(YEAR, -1, GETDATE())), '-09-09 ', '19:25:00')),
+(2000, 130, 20, CONCAT(YEAR(DATEADD(YEAR, -1, GETDATE())), '-09-05 ', '19:25:00'))

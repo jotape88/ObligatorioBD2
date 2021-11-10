@@ -2,14 +2,11 @@ USE ObligatorioBD2N3A
 GO
 --------------------------------------------------------------------------------------------------------------------------
 /* a.	Mostrar los datos del/los trene/s que pasaron por última vez por una línea-estación */
-SELECT P.codigoEstacion, T.*
+SELECT T.*
 FROM Trenes T, Pasan P
 WHERE T.numero = P.numeroTren AND
-	  P.fechaYHora = (SELECT TOP 1 P2.fechaYHora
-					  FROM Pasan P2
-					  WHERE P2.codigoEstacion = P.codigoEstacion
-					  ORDER BY P2.fechaYHora DESC)
-ORDER BY P.codigoEstacion
+	  P.fechaYHora = (SELECT MAX(fechaYHora)
+					  FROM Pasan)
 
 --------------------------------------------------------------------------------------------------------------------------
 /* b.	Mostrar los datos de las estaciones por las que pasaron más trenes este 
@@ -81,8 +78,9 @@ WHERE T.numero IN (SELECT P.numeroTren
 				   GROUP BY P.numeroTren
 				   HAVING COUNT(DISTINCT P.codigoEstacion) = (SELECT COUNT (E.codigo)
 													          FROM Estaciones E))
-												
- /*Forma alternativa (usando group by)*/
+											
+
+ /*Forma alternativa (usando group by en la consulta principal)*/
 --SELECT T.*
 --FROM TRENES T, PASAN P
 --WHERE T.numero = P.numeroTren

@@ -14,7 +14,8 @@ CREATE TABLE Estaciones (
 	codigo INT NOT NULL,
 	descripcion VARCHAR(60),
 	barrio VARCHAR(25),
-	CONSTRAINT PK_Estaciones PRIMARY KEY (codigo)
+	contadorTrenes INT,
+	CONSTRAINT PK_Estaciones PRIMARY KEY (codigo),
 );
 
 
@@ -73,26 +74,26 @@ CREATE TABLE Pasan (
 
 
 INSERT INTO Estaciones VALUES 
-(1, 'Acton Town station', 'Ealing'),
-(2, 'Archway station', 'Islington'),
-(3, 'Baker Street station', 'City of Westminster'),
-(4, 'Barons Court station', 'Hammersmith and Fulham'),
-(5, 'Bow Road station', 'Tower Hamlets'),
-(6, 'Cannon Street station', 'City of London'),
-(7, 'East Ham station', 'Newham'),
-(8, 'Highgate station', 'Haringey'),
-(9, 'Kennington station', 'Southwark'),
-(10, 'Leyton station', 'Waltham Forest'),
-(11, 'Liverpool Street station', 'City of London'),
-(12, 'Mill Hill East station', 'Barnet'),
-(13, 'Morden station', 'Merton'),
-(14, 'Notting Hill Gate station', 'Kensington and Chelsea'),
-(15, 'Oakwood station', 'Enfield'),
-(16, 'Oval station', 'Lambeth'),
-(17, 'Roding Valley station', 'Epping Forest Redbridge'),
-(18, 'Ruislip Gardens station', 'Hillingdon'),
-(19, 'South Kenton station', 'Brent'),
-(20, 'Woodford station', 'Redbridge')
+(1, 'Acton Town station', 'Ealing', 0),
+(2, 'Archway station', 'Islington', 0),
+(3, 'Baker Street station', 'City of Westminster', 0),
+(4, 'Barons Court station', 'Hammersmith and Fulham', 0),
+(5, 'Bow Road station', 'Tower Hamlets', 0),
+(6, 'Cannon Street station', 'City of London', 0),
+(7, 'East Ham station', 'Newham', 0),
+(8, 'Highgate station', 'Haringey', 0),
+(9, 'Kennington station', 'Southwark', 0),
+(10, 'Leyton station', 'Waltham Forest', 0),
+(11, 'Liverpool Street station', 'City of London', 0),
+(12, 'Mill Hill East station', 'Barnet', 0),
+(13, 'Morden station', 'Merton', 0),
+(14, 'Notting Hill Gate station', 'Kensington and Chelsea', 0),
+(15, 'Oakwood station', 'Enfield', 0),
+(16, 'Oval station', 'Lambeth', 0),
+(17, 'Roding Valley station', 'Epping Forest Redbridge', 0),
+(18, 'Ruislip Gardens station', 'Hillingdon', 0),
+(19, 'South Kenton station', 'Brent', 0),
+(20, 'Woodford station', 'Redbridge', 0)
 
 
 INSERT INTO Lineas VALUES 

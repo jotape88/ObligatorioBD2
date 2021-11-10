@@ -30,7 +30,7 @@ END
 
 ---------Consultas y datos de prueba---------
 DECLARE @retornoEj1 INT
-EXECUTE SP_EjercicioA 180, 20, @retornoEj1 OUTPUT
+EXECUTE SP_EjercicioA 100, 20, @retornoEj1 OUTPUT
 PRINT @retornoEj1
 
 select * from Estaciones
